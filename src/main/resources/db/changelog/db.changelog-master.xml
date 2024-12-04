@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="author">
+         <sqlFile path="src/main/resources/db/migration/V1__database.sql" />
+     </changeSet>
+     <changeSet id="2" author="author">
+         <sqlFile path="src/main/resources/db/migration/V2__monkeyPrimaryInfo.sql" />
+     </changeSet>
+     <changeSet id="3" author="author">
+         <sqlFile path="src/main/resources/db/migration/V3__monkeyMilitaryInfo.sql" />
+     </changeSet>
+     <changeSet id="4" author="author">
+         <sqlFile path="src/main/resources/db/migration/V4__monkeyMageInfo.sql" />
+     </changeSet>
+     <changeSet id="5" author="author">
+         <sqlFile path="src/main/resources/db/migration/V5__monkeySupportInfo.sql" />
+     </changeSet>
+     <changeSet id="6" author="author">
+         <sqlFile path="src/main/resources/db/migration/V6__monkeyAddHeroesAndParagon.sql" />
+     </changeSet>
+     <changeSet id="7" author="author">
+         <sqlFile path="src/main/resources/db/migration/V7__mapInfo.sql" />
+     </changeSet>
+ </databaseChangeLog>
