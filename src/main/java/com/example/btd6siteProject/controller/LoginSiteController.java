@@ -1,25 +1,64 @@
 package com.example.btd6siteProject.controller;
 
+import com.example.btd6siteProject.DTO.LoginRequest;
+import com.example.btd6siteProject.model.entity.User;
 import com.example.btd6siteProject.service.UserService;
-
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/loginSite")
+@RequestMapping("/api/login")
 public class LoginSiteController {
 
 
     private final UserService userService;
-
-    public LoginSiteController(UserService userService){
+    private final MessageSource messageSource;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    public LoginSiteController(UserService userService, MessageSource messageSource){
         this.userService = userService;
+        this.messageSource = messageSource;
+    }
+    @GetMapping("/language")
+    public ResponseEntity<Map<String, String>> setLanguage(@RequestHeader(value = "used-language", defaultValue = "en") String language) {
+        Locale locale = Locale.forLanguageTag(language);
+
+        String usernameLabel = messageSource.getMessage("login.username", null, locale);
+        String passwordLabel = messageSource.getMessage("login.password", null, locale);
+        String submitButton = messageSource.getMessage("login.sbmit", null, locale);
+        String registerButton = messageSource.getMessage("login.register", null, locale);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("username", usernameLabel);
+        response.put("password", passwordLabel);
+        response.put("sbmit", submitButton);
+        response.put("register", registerButton);
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/loginSite")
-    public ResponseEntity<String> loginSite(){
-        return ResponseEntity.ok("welcome to uganda");
+    @PostMapping("/loginInto")
+    public ResponseEntity<String> loginButtonPressed(@RequestBody LoginRequest loginRequest){
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+        //password = passwordEncoder.encode(password);
+        Optional<User> userOptional = userService.authorization(username, password);
+
+        if(userOptional.isPresent()){
+            System.out.println("authorized");
+            return ResponseEntity.ok("Login succeed");
+        }
+        else{
+            System.out.println("fail");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
     }
+
 }
