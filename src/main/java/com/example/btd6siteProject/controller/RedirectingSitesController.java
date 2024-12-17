@@ -9,8 +9,19 @@ public class RedirectingSitesController {
     public String showLoginPage() {
         return "loginSite";
     }
+
     @GetMapping("/register")
     public String showRegisterPage(){
         return "registerSite";
+    }
+
+    @GetMapping("")
+    public String showMainSitePage(){
+        return "mainSite";
+    }
+
+    @GetMapping("/createPost")
+    public String showMakingPostSite(){
+        return "makingPostSite";
     }
 }

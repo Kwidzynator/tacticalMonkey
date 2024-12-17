@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../CSS/makingPostSite.css">
+</head>
+<body>
+<script src = "../JS/translation/makingPostSiteTranslation.js"></script>
+    <form class="making-post">
+        <label for="postTitle"> post.title </label>
+        <input type="text" id="postTitle" name="postTitle"> <br>
+
+        <label for="postDescription">post.description</label>
+        <input type="text" id="postDescription" name="postDescription"><br>
+
+        <label for="addMapName">post.mapName</label>
+        <input type="text" id="addMapName" name="addMapName"><br>
+
+        <label for="addMapImg">post.map</label>
+        <input type="file" id="addMapImg" name="mapImg" accept=".jpg,.jpeg,.png"> <br>
+
+        <div class = "map-img">
+            <img id="previewMap" src="" alt="previewMap">
+            <svg id="svgOverlay"></svg>
+
+        </div> <br>
+        <button id="postSubmit">post.submit</button>
+    </form>
+
+    <div id="monkey-info">
+        <p>Typ: Dart Monkey</p>
+        <p>Nazwa: Super Monkey</p>
+        <p>Ulepszenie 1: Fireball</p>
+        <p>Ulepszenie 2: Explosive</p>
+        <p>Ulepszenie 3: Ultra Power</p>
+    </div>
+
+<script src = "../JS/logic/makingPostSiteLogic.js"></script>
+</body>
+</html>

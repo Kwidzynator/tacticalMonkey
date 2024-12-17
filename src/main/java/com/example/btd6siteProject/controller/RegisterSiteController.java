@@ -2,27 +2,29 @@ package com.example.btd6siteProject.controller;
 
 import com.example.btd6siteProject.DTO.RegisterRequest;
 import com.example.btd6siteProject.model.entity.User;
+import com.example.btd6siteProject.service.EncryptionService;
 import com.example.btd6siteProject.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/register")
 public class RegisterSiteController {
-    private UserService userService;
-    private MessageSource messageSource;
+    private final UserService userService;
+    private final MessageSource messageSource;
 
-    public RegisterSiteController(UserService userService, MessageSource messageSource) {
+    private final EncryptionService encryptionService;
+
+    public RegisterSiteController(UserService userService, MessageSource messageSource, EncryptionService encryptionService) {
         this.userService = userService;
         this.messageSource = messageSource;
+        this.encryptionService = encryptionService;
     }
 
     @GetMapping("/language")
@@ -46,60 +48,22 @@ public class RegisterSiteController {
     }
 
     @PostMapping("/createAcc")
-    public ResponseEntity<String> createAccount(@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<String> createAccount(@RequestBody @Valid RegisterRequest registerRequest){
         String username = registerRequest.getUsername();
         String email = registerRequest.getEmail();
         String password = registerRequest.getPassword();
         String role = registerRequest.getRole();
 
-        ResponseEntity response = checkConditions(username, password, email);
-        if(response.getStatusCode().is4xxClientError()){
-            return response;
-        }
+        password = encryptionService.hashPassword(password);
 
+        System.out.println();
+        System.out.println(password);
+        System.out.println();
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setRole("USER");
-        userService.save(user);
+        userService.createUser(username, email, password);
+
         return ResponseEntity.ok("account successfully created");
 
-    }
-
-    private ResponseEntity<String> checkConditions(String username, String password, String email){
-        if(Stream.of(username, email, password).anyMatch(this::checkIfEmpty)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("some field is empty");
-        }
-
-        if(!checkPasswordConditions(password)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("password doesnt require conditions: longer than 7," +
-                    " has special character, has at least one uppercase");
-        }
-        Optional<User> userOptional = userService.findByEmail(email);
-        if(userOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already used");
-        }
-        userOptional = userService.findByUsername(username);
-        if(userOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username is taken");
-        }
-        return ResponseEntity.ok("everything is fine");
-    }
-    private boolean checkIfEmpty(String content){
-        return content.isEmpty();
-    }
-
-    private boolean checkPasswordConditions(String password){
-        if(password.length() < 7){
-            return false;
-        }
-
-        boolean hasUpperCase = password.chars().anyMatch(Character::isUpperCase);
-        boolean hasSpecialCharacter = password.chars().anyMatch(c -> !Character.isLetterOrDigit(c));
-
-        return hasUpperCase && hasSpecialCharacter;
     }
 
 }

@@ -39,4 +39,16 @@ public class UserService{
         System.out.println("password: " + password);
         return userRepository.authorization(username, password);
     }
+    public Optional<User> createUser(String username, String email, String password){
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setRole("USER");
+
+        User savedUser = userRepository.save(user);
+
+        return Optional.of(savedUser);
+
+    }
 }

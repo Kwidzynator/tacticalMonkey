@@ -2,11 +2,12 @@ package com.example.btd6siteProject.controller;
 
 import com.example.btd6siteProject.DTO.LoginRequest;
 import com.example.btd6siteProject.model.entity.User;
+import com.example.btd6siteProject.service.EncryptionService;
 import com.example.btd6siteProject.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,10 +22,11 @@ public class LoginSiteController {
 
     private final UserService userService;
     private final MessageSource messageSource;
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    public LoginSiteController(UserService userService, MessageSource messageSource){
+    private final EncryptionService encryptionService;
+    public LoginSiteController(UserService userService, MessageSource messageSource, EncryptionService encryptionService){
         this.userService = userService;
         this.messageSource = messageSource;
+        this.encryptionService = encryptionService;
     }
     @GetMapping("/language")
     public ResponseEntity<Map<String, String>> setLanguage(@RequestHeader(value = "used-language", defaultValue = "en") String language) {
@@ -45,10 +47,11 @@ public class LoginSiteController {
     }
 
     @PostMapping("/loginInto")
-    public ResponseEntity<String> loginButtonPressed(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<String> loginButtonPressed(@RequestBody @Valid LoginRequest loginRequest){
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        //password = passwordEncoder.encode(password);
+
+        password = encryptionService.hashPassword(password);
         Optional<User> userOptional = userService.authorization(username, password);
 
         if(userOptional.isPresent()){

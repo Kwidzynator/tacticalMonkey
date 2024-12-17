@@ -6,7 +6,7 @@ document.getElementById("loginSubmit").addEventListener('click', async function(
 
 
     try {
-        const response = await fetch("/api/login/login", {
+        const response = await fetch("/api/login/loginInto", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -20,6 +20,7 @@ document.getElementById("loginSubmit").addEventListener('click', async function(
     }
 });
 
-document.getElementById("loginRegister").addEventListener('click', function(){
+document.getElementById("loginRegister").addEventListener('click', function(event){
+    event.preventDefault()
     window.location.href = "http://127.0.0.1:8080/register"
 })

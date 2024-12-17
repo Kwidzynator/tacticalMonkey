@@ -1,7 +1,12 @@
 package com.example.btd6siteProject.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import org.antlr.v4.runtime.misc.NotNull;
+
 public class LoginRequest {
+    @NotBlank(message = "username cannot be null/blank")
     private String username;
+    @NotBlank(message = "password cannot be null/blank")
     private String password;
 
     public String getUsername() {
