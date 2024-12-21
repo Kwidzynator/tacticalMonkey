@@ -3,10 +3,7 @@ package com.example.btd6siteProject.config;
 import com.example.btd6siteProject.controller.LoginSiteController;
 import com.example.btd6siteProject.controller.MakingPostSiteController;
 import com.example.btd6siteProject.controller.RegisterSiteController;
-import com.example.btd6siteProject.repository.MonkeyRepository;
-import com.example.btd6siteProject.repository.MonkeyTypeRepository;
-import com.example.btd6siteProject.repository.PostRepository;
-import com.example.btd6siteProject.repository.UserRepository;
+import com.example.btd6siteProject.repository.*;
 import com.example.btd6siteProject.service.*;
 import com.example.btd6siteProject.validators.classes.EmailValidator;
 import com.example.btd6siteProject.validators.classes.PasswordValidator;
@@ -36,6 +33,8 @@ public class AppConfig {
         return new UserService(userRepository);
     }
 
+    @Bean
+    public GameMapService gameMapService(GameMapRepository gameMapRepository) { return new GameMapService(gameMapRepository);}
 
     @Bean
     public EncryptionService encryptionService(PasswordEncoder passwordEncoder){
@@ -59,8 +58,8 @@ public class AppConfig {
     }
 
     @Bean
-    public MakingPostSiteController makingPostSiteController(MessageSource messageSource, PostService postService){
-        return new MakingPostSiteController(messageSource, postService);
+    public MakingPostSiteController makingPostSiteController(MessageSource messageSource, PostService postService, GameMapService gameMapService){
+        return new MakingPostSiteController(messageSource, postService, gameMapService);
     }
 
     @Bean

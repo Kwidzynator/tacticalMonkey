@@ -17,13 +17,16 @@ document.getElementById("addMapImg").addEventListener('change', function(event){
         reader.onload = function(e){
             clear();
             mapPreview.src = e.target.result;
-            mapPreview.onload = function(){
+            mapPreview.onload = function() {
                 mapPreview.style.display = 'block';
 
                 svgOverlay.style.display = 'block';
                 svgOverlay.style.width = mapPreview.clientWidth + "px";
                 svgOverlay.style.height = mapPreview.clientHeight + "px";
-            }
+                svgOverlay.style.position = "absolute";
+                svgOverlay.style.top = mapPreview.offsetTop + "px";
+                svgOverlay.style.left = mapPreview.offsetLeft + "px";
+            };
 
         }
         reader.readAsDataURL(file)
@@ -40,13 +43,18 @@ function clear(){
     points = [];
     svgOverlay.innerHTML = "";
 }
-document.getElementById("svgOverlay").addEventListener('click', function(e) {
+document.getElementById("svgOverlay").addEventListener('click', function (e) {
     const rect = svgOverlay.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
 
-    showCategorySelector(x, y);
+    if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+        console.log(`Kliknięcie w obrębie SVG: X=${x}, Y=${y}`);
+        showCategorySelector(x, y);
+    } else {
+        console.log("Kliknięcie poza obszarem SVG!");
+    }
 });
 
 function showCategorySelector(x, y) {
@@ -104,10 +112,16 @@ function showCategorySelector(x, y) {
 
 }
 
-function setUpModal(modal, x, y){
+function setUpModal(modal, x, y) {
+    const rect = svgOverlay.getBoundingClientRect();
+    const globalX = rect.left + window.scrollX + x;
+    const globalY = rect.top + window.scrollY + y;
+
     modal.style.position = "absolute";
-    modal.style.left = `${x + 10}px`;
-    modal.style.top = `${y}px`;
+    modal.style.left = `${globalX}px`;
+    modal.style.top = `${globalY}px`;
+
+
     modal.style.backgroundColor = "white";
     modal.style.padding = "10px";
     modal.style.border = "1px solid #ccc";
@@ -145,10 +159,16 @@ function addPointToSVG(x, y, monkey) {
 
 
     circle.addEventListener("mouseenter", () => {
+        const rect = svgOverlay.getBoundingClientRect();
+        const globalX = rect.left + window.scrollX + x;
+        const globalY = rect.top + window.scrollY + y;
+
         monkeyInfo.style.display = "block";
         monkeyInfo.style.position = "absolute";
-        monkeyInfo.style.left = `${x + 10}px`;
-        monkeyInfo.style.top = `${y + 10}px`;
+        monkeyInfo.style.left = `${globalX + 10}px`;
+        monkeyInfo.style.top = `${globalY + 10}px`;
+
+        showMonkeyInfo(monkey, monkeyInfo);
     });
 
     circle.addEventListener("mouseleave", () => {
@@ -169,3 +189,27 @@ function showMonkeyInfo(monkey, monkeyInfo){
         <p>Ulepszenie 3: ${monkey.upgrades.upgrade3}</p>
     `;
 }
+
+document.addEventListener("DOMContentLoaded", function (){
+    const selected = document.getElementById("addMapName");
+    fetch("/api/makingPost/maps", {
+        method: 'GET',
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data =>{
+            Object.entries(data).forEach(([id, name]) => {
+                const option = document.createElement("option");
+                option.value = id;
+                option.textContent = name;
+                selected.appendChild(option);
+            });
+        })
+        .catch(error =>{
+           console.error("Something went wrong with loading data")
+        });
+});

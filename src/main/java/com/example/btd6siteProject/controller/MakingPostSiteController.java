@@ -1,24 +1,30 @@
 package com.example.btd6siteProject.controller;
 
 import com.example.btd6siteProject.DTO.PostRequest;
+import com.example.btd6siteProject.model.entity.GameMap;
+import com.example.btd6siteProject.service.GameMapService;
 import com.example.btd6siteProject.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api/makingPost")
 public class MakingPostSiteController {
     private final MessageSource messageSource;
     private final PostService postService;
-    public MakingPostSiteController(MessageSource messageSource, PostService postService){
+
+    private final GameMapService gameMapService;
+    public MakingPostSiteController(MessageSource messageSource, PostService postService, GameMapService gameMapService){
         this.messageSource = messageSource;
         this.postService = postService;
+        this.gameMapService = gameMapService;
     }
     @GetMapping("/language")
     public ResponseEntity<Map<String, String>> setLanguage(@RequestHeader(value= "used-language", defaultValue = "en") String language){
@@ -37,6 +43,19 @@ public class MakingPostSiteController {
         response.put("map", mapImgLabel);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/maps")
+    public ResponseEntity<Map<Integer, String>> giveMapNames() {
+        List<GameMap> maps = gameMapService.findAll();
+
+        Map<Integer, String> mapNames = maps.stream().collect(Collectors.toMap(
+                GameMap::getId,
+                GameMap::getMapName
+        ));
+
+
+        return ResponseEntity.ok(mapNames);
     }
 
     @PostMapping("/post")

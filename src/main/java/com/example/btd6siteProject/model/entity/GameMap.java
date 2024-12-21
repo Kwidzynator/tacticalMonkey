@@ -17,4 +17,8 @@ public class GameMap {
     public String getMapName() {
         return mapName;
     }
+
+    public Integer getId() {
+        return id;
+    }
 }
