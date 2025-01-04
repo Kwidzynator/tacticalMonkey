@@ -2,7 +2,6 @@ package com.example.btd6siteProject.model.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -27,11 +26,32 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private AppUser appUser;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public void setMapImg(byte[] mapImg) {
+        this.mapImg = mapImg;
+    }
+
+    public void setMap(GameMap map) {
+        this.map = map;
+    }
+
+    public void setUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

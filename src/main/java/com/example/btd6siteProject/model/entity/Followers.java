@@ -14,11 +14,11 @@ public class Followers {
 
     @ManyToOne
     @JoinColumn(name = "following_user_id", nullable = false)
-    private User followingUser;
+    private AppUser followingAppUser;
 
     @ManyToOne
     @JoinColumn(name = "followed_user_id", nullable = false)
-    private User followedUser;
+    private AppUser followedAppUser;
 
     @Column(name = "followed_at", nullable = false)
     private LocalDateTime createdAt;

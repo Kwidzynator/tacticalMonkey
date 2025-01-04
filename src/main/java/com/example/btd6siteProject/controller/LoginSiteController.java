@@ -1,7 +1,7 @@
 package com.example.btd6siteProject.controller;
 
 import com.example.btd6siteProject.DTO.LoginRequest;
-import com.example.btd6siteProject.model.entity.User;
+import com.example.btd6siteProject.model.entity.AppUser;
 import com.example.btd6siteProject.service.EncryptionService;
 import com.example.btd6siteProject.service.UserService;
 import jakarta.validation.Valid;
@@ -51,15 +51,16 @@ public class LoginSiteController {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
-        password = encryptionService.hashPassword(password);
-        Optional<User> userOptional = userService.authorization(username, password);
+        Optional<AppUser> userOptional = userService.findByUsername(username);
 
         if(userOptional.isPresent()){
+            AppUser user = userOptional.get();
+            if(encryptionService.passwordMatches(password, user.getPassword()))
             System.out.println("authorized");
             return ResponseEntity.ok("Login succeed");
         }
         else{
-            System.out.println("fail");
+            System.out.println("user does not exist");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }

@@ -12,4 +12,8 @@ public class EncryptionService {
     public String hashPassword(String password) {
         return passwordEncoder.encode(password);
     }
+
+    public boolean passwordMatches(String rawPassword, String storedHash){
+        return passwordEncoder.matches(rawPassword, storedHash);
+    }
 }

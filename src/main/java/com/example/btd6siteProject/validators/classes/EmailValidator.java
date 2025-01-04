@@ -1,6 +1,6 @@
 package com.example.btd6siteProject.validators.classes;
 
-import com.example.btd6siteProject.model.entity.User;
+import com.example.btd6siteProject.model.entity.AppUser;
 import com.example.btd6siteProject.service.UserService;
 import com.example.btd6siteProject.validators.annotations.UniqueEmail;
 import jakarta.validation.ConstraintValidator;
@@ -18,7 +18,7 @@ public class EmailValidator implements ConstraintValidator<UniqueEmail, String> 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext constraintValidatorContext) {
 
-        Optional<User> userOptional = userService.findByEmail(email);
+        Optional<AppUser> userOptional = userService.findByEmail(email);
         return userOptional.isEmpty();
     }
 }

@@ -14,6 +14,9 @@ public class GameMapService {
         this.gameMapRepository = gameMapRepository;
     }
 
+    public GameMap findGameMapsById(int id){
+        return gameMapRepository.findGameMapsById(id);
+    }
     public Optional<GameMap> findGameMapsByMapName(String name){
         return gameMapRepository.findGameMapsByMapName(name);
     }

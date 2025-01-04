@@ -1,3 +1,4 @@
+import {getCookie, getCsrfToken, getCsrfHeader } from './csrfToken.js';
 document.getElementById("registerSubmit").addEventListener('click', async function(event) {
     event.preventDefault()
     let username = document.getElementById('RegisterUsername').value
@@ -8,7 +9,8 @@ document.getElementById("registerSubmit").addEventListener('click', async functi
         const response = await fetch("/api/register/createAcc", {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': getCsrfToken()
             },
             body: JSON.stringify({ username: username, email: email, password: passwd })
         });

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MonkeyRepository extends JpaRepository<Monkey, Integer> {
+
+    Monkey findById(int id);
     @Query("SELECT m FROM Monkey m WHERE m.type = :type")
     List<Monkey> findByMonkeyType(MonkeyType type);
     @Query("SELECT m FROM Monkey m WHERE m.name = :name")

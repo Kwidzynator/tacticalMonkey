@@ -10,7 +10,29 @@ public class PostRequest {
     private String description;
 
     @NotNull
-    private byte[] mapImg;
-
+    private String mapImg;
+    @NotNull
     private int mapId;
+
+    @NotNull
+    private int userId;
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getMapImg() {
+        return mapImg;
+    }
+
+    public int getMapId() {
+        return mapId;
+    }
+
+    public int getUserId(){
+        return userId;
+    }
 }

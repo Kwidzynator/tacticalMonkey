@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository extends JpaRepository<Post, Integer> {
+public interface PostRepository extends JpaRepository<Post, Long> {
+    Post findById(@Param("id") int id);
     Optional<Post> findByTitle(@Param("postTitle") String postTitle);
     List<Post> findByMap_MapName(@Param("map_name") String mapName);
     @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +29,13 @@ public class User {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "appUser")
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "followingUser")
+    @OneToMany(mappedBy = "followingAppUser")
     private List<Followers> following;
 
-    @OneToMany(mappedBy = "followedUser")
+    @OneToMany(mappedBy = "followedAppUser")
     private List<Followers> followers;
 
     public Integer getId() {
@@ -109,4 +109,6 @@ public class User {
     public void setFollowers(List<Followers> followers) {
         this.followers = followers;
     }
+
+
 }

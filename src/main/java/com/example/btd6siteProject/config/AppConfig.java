@@ -37,14 +37,14 @@ public class AppConfig {
     public GameMapService gameMapService(GameMapRepository gameMapRepository) { return new GameMapService(gameMapRepository);}
 
     @Bean
-    public EncryptionService encryptionService(PasswordEncoder passwordEncoder){
-        return new EncryptionService(passwordEncoder);
-    }
-
-    @Bean
     public MonkeyTypeService monkeyTypeService(MonkeyTypeRepository monkeyTypeRepository)
     {
         return new MonkeyTypeService(monkeyTypeRepository);
+    }
+
+    @Bean
+    public PointsService pointsService(PointsRepository pointsRepository){
+        return new PointsService(pointsRepository);
     }
 
     @Bean
@@ -58,8 +58,10 @@ public class AppConfig {
     }
 
     @Bean
-    public MakingPostSiteController makingPostSiteController(MessageSource messageSource, PostService postService, GameMapService gameMapService){
-        return new MakingPostSiteController(messageSource, postService, gameMapService);
+    public MakingPostSiteController makingPostSiteController(MessageSource messageSource, PostService postService,
+                                                             GameMapService gameMapService, MonkeyService monkeyService,
+                                                             PointsService pointsService){
+        return new MakingPostSiteController(messageSource, postService, gameMapService, monkeyService, pointsService);
     }
 
     @Bean
@@ -77,12 +79,6 @@ public class AppConfig {
         internalResourceViewResolver.setPrefix("html/");
         internalResourceViewResolver.setSuffix(".html");
         return internalResourceViewResolver;
-    }
-
-    //TODO move it to SecurityConfig.java while setting it up
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
 }

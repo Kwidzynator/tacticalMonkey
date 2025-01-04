@@ -71,6 +71,15 @@ CREATE TABLE IF NOT EXISTS monkey_paragon (
                                 CONSTRAINT fk_monkey_paragon_type FOREIGN KEY (type_id) REFERENCES monkeys_types(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS points(
+                                     id SERIAL PRIMARY KEY,
+                                     post_id INTEGER NOT NULL,
+                                     x FLOAT NOT NULL,
+                                     y FLOAT NOT NULL,
+                                     monkey_id INTEGER NOT NULL,
+                                     CONSTRAINT fk_point_post FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+                                     CONSTRAINT fk_point_monkey FOREIGN KEY (monkey_id) REFERENCES monkeys(id) ON DELETE SET NULL
+);
 
 INSERT INTO monkeys_types(type_name)
 VALUES
@@ -80,3 +89,4 @@ VALUES
     ('Support'),
     ('Paragon'),
     ('Hero');
+

@@ -1,7 +1,6 @@
 package com.example.btd6siteProject.controller;
 
 import com.example.btd6siteProject.DTO.RegisterRequest;
-import com.example.btd6siteProject.model.entity.User;
 import com.example.btd6siteProject.service.EncryptionService;
 import com.example.btd6siteProject.service.UserService;
 import jakarta.validation.Valid;

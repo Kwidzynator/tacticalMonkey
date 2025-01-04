@@ -1,6 +1,6 @@
 package com.example.btd6siteProject.db;
 
-import com.example.btd6siteProject.model.entity.User;
+import com.example.btd6siteProject.model.entity.AppUser;
 import com.example.btd6siteProject.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +22,14 @@ public class UserTests {
 
     @Test
     public void authorizationTest(){
-        User user = new User();
-        user.setUsername("a");
-        user.setPassword("b");
+        AppUser appUser = new AppUser();
+        appUser.setUsername("a");
+        appUser.setPassword("b");
 
-        assertThat(userService.authorization(user.getUsername(), user.getPassword())).isNotPresent();
+        assertThat(userService.authorization(appUser.getUsername(), appUser.getPassword())).isNotPresent();
 
-        user.setPassword("a");
-        assertThat(userService.authorization(user.getUsername(), user.getPassword())).isPresent();
+        appUser.setPassword("a");
+        assertThat(userService.authorization(appUser.getUsername(), appUser.getPassword())).isPresent();
 
     }
 }

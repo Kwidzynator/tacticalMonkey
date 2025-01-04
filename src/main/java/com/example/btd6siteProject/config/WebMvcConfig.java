@@ -62,9 +62,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/");
-
         registry.addResourceHandler("/html/**")
                 .addResourceLocations("classpath:/static/html/");
+        registry.addResourceHandler("/lang/**")
+                .addResourceLocations("classpath:/lang/");
     }
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

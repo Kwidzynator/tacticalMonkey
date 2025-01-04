@@ -14,6 +14,8 @@ public class MonkeyService {
     public MonkeyService(MonkeyRepository monkeyRepository) {
         this.monkeyRepository = monkeyRepository;
     }
+
+    public Monkey findById(int id) { return monkeyRepository.findById(id); }
     public List<Monkey> getMonkeysByType(MonkeyType type) {
         return monkeyRepository.findByMonkeyType(type);
     }
