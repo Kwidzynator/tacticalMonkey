@@ -8,6 +8,9 @@ import jakarta.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -19,15 +22,14 @@ import java.util.Optional;
 @RequestMapping("/api/login")
 public class LoginSiteController {
 
-
-    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
     private final MessageSource messageSource;
-    private final EncryptionService encryptionService;
-    public LoginSiteController(UserService userService, MessageSource messageSource, EncryptionService encryptionService){
-        this.userService = userService;
+
+    public LoginSiteController(MessageSource messageSource, AuthenticationManager authenticationManager) {
         this.messageSource = messageSource;
-        this.encryptionService = encryptionService;
+        this.authenticationManager = authenticationManager;
     }
+
     @GetMapping("/language")
     public ResponseEntity<Map<String, String>> setLanguage(@RequestHeader(value = "used-language", defaultValue = "en") String language) {
         Locale locale = Locale.forLanguageTag(language);
@@ -47,22 +49,25 @@ public class LoginSiteController {
     }
 
     @PostMapping("/loginInto")
-    public ResponseEntity<String> loginButtonPressed(@RequestBody @Valid LoginRequest loginRequest){
-        String username = loginRequest.getUsername();
-        String password = loginRequest.getPassword();
+    public ResponseEntity<String> loginButtonPressed(@RequestBody @Valid LoginRequest loginRequest) {
+        try {
 
-        Optional<AppUser> userOptional = userService.findByUsername(username);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    loginRequest.getUsername(), loginRequest.getPassword());
 
-        if(userOptional.isPresent()){
-            AppUser user = userOptional.get();
-            if(encryptionService.passwordMatches(password, user.getPassword()))
-            System.out.println("authorized");
+
+
+
+            authenticationManager.authenticate(authToken);
+            System.out.println("Authorization successful"); // If successful
+
             return ResponseEntity.ok("Login succeed");
-        }
-        else{
-            System.out.println("user does not exist");
+        } catch (AuthenticationException e) {
+
+            System.out.println("Authentication failed with exception: " + e.getMessage());
+
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
-
 }

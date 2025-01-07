@@ -11,6 +11,7 @@ import com.example.btd6siteProject.validators.classes.UsernameValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,8 +30,8 @@ public class AppConfig {
     }
 
     @Bean
-    public UserService userService(UserRepository userRepository){
-        return new UserService(userRepository);
+    public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+        return new UserService(userRepository, passwordEncoder);
     }
 
     @Bean
@@ -48,8 +49,8 @@ public class AppConfig {
     }
 
     @Bean
-    public LoginSiteController loginSiteController(UserService userService, MessageSource messageSource, EncryptionService encryptionService){
-        return new LoginSiteController(userService, messageSource, encryptionService);
+    public LoginSiteController loginSiteController(MessageSource messageSource, AuthenticationManager authenticationManager){
+        return new LoginSiteController(messageSource, authenticationManager);
     }
 
     @Bean

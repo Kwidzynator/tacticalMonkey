@@ -14,6 +14,7 @@ document.getElementById("registerSubmit").addEventListener('click', async functi
             },
             body: JSON.stringify({ username: username, email: email, password: passwd })
         });
+        window.location.href = "http://127.0.0.1:8080/login";
         const data = await response.json();
         console.log("register successful:", data);
     } catch (error) {

@@ -15,7 +15,7 @@ public class RedirectingSitesController {
         return "registerSite";
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public String showMainSitePage(){
         return "mainSite";
     }

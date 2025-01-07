@@ -53,7 +53,6 @@ public class RegisterSiteController {
         String password = registerRequest.getPassword();
         String role = registerRequest.getRole();
 
-        password = encryptionService.hashPassword(password);
 
         System.out.println();
         System.out.println(password);

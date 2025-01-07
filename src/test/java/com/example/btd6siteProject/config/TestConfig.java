@@ -9,6 +9,7 @@ import com.example.btd6siteProject.service.MonkeyService;
 import com.example.btd6siteProject.service.UserService;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @TestConfiguration
 public class TestConfig {
@@ -17,8 +18,8 @@ public class TestConfig {
         return new MonkeyTests(monkeyService, monkeyRepository, monkeyTypeRepository);
     }
     @Bean
-    public UserService userService(UserRepository userRepository){
-        return new UserService(userRepository);
+    public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+        return new UserService(userRepository, passwordEncoder);
     }
     @Bean
     public UserTests userTests(UserService userService){
