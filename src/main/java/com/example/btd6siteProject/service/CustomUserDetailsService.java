@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
@@ -22,15 +23,19 @@ public class UserDetailsService implements org.springframework.security.core.use
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        return User.withUsername(appUser.getUsername())
-                .password(appUser.getPassword())
-                .roles(appUser.getRole())
-                .build();
+    public UserDetails loadUserByUsername(String username) throws
+            UsernameNotFoundException {
+        AppUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("brak użytkownika"));
+        List<GrantedAuthority> authorities =
+                user.getRole().stream()
+                        .map(role -> new SimpleGrantedAuthority(role.getName()))
+                        .collect(Collectors.toList());
+        return new org.springframework.security.core.userdetails.User(username,
+                user.getPassword(), authorities);
     }
-    private List<GrantedAuthority> getAuthority(String role) {
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
+    private List<GrantedAuthority> getAuthorities(String role) {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
     }
+
 }
